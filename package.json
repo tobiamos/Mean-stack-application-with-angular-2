@@ -1,0 +1,33 @@
+{
+  "name": "mean-stack",
+  "version": "1.0.0",
+  "description": "A Real time mean stack application with socket.io",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobiamos/Mean-stack-application-with-angular-2.git"
+  },
+  "keywords": [
+    "MEAN",
+    "NODE",
+    "EXPRESS",
+    "ANGULAR",
+    "SOCKETIO",
+    "MONGODB"
+  ],
+  "author": "Amos Tobi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tobiamos/Mean-stack-application-with-angular-2/issues"
+  },
+  "homepage": "https://github.com/tobiamos/Mean-stack-application-with-angular-2#readme",
+  "dependencies": {
+    "express": "^4.15.4",
+    "mongoose": "^4.11.7",
+    "socket.io": "^2.0.3"
+  }
+}
