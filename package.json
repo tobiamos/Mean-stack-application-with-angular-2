@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/tobiamos/Mean-stack-application-with-angular-2#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "mongoose": "^4.11.7",
     "socket.io": "^2.0.3"

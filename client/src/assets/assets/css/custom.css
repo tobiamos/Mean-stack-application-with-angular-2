@@ -1,0 +1,60 @@
+body{
+   font-family: 'Montserrat', sans-serif;
+}
+
+.form-control{
+     border: 1px solid black;
+}
+
+.well{
+    background: #fff;
+}
+.fa-gear{
+    color: #7CE4FE;
+    margin-right: 6px;
+    font-size: 25px;
+}
+
+.cb{
+    color: #7CE4FE;
+    margin-right: 6px;
+    font-size: 25px;
+}
+
+a{
+    color: #7CE4FE;
+}
+
+h6{
+    display: inline;
+}
+ .fa-comments{
+    margin-right: 16px;
+     color: #7CE4FE;
+} 
+
+.blue{
+    color: #7CE4FE;
+}
+.active{
+    
+}
+
+.report{
+    color: #afabab;
+    font-size: 12px;
+}
+
+.recieved{
+     margin: 10px;
+}
+
+.container-fluid{
+    background: #afabab;
+    border: 30px;
+    padding: 10px;
+}
+.footer{
+    color:white;
+
+}

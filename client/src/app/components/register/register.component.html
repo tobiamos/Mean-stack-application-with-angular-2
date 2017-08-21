@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="text-center panel-title">Register</h3>
+      </div>
+      <div class="panel-body">
+        <p><i class="fa fa-edit"></i>Please fill in the form with correct information</p>
+        <br>
+        <form (submit)="onSubmit()" [formGroup]="registerForm" novalidate>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" formControlName="email" required name="email" id="email" autocomplete="off" class="form-control">
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+              <div *ngIf="email.errors.required ||  email.errors.email">
+                A Valid Email is required.
+              </div>
+              <div *ngIf="email.errors?.minlength">
+                Email must be at least 5 characters long
+              </div>
+              <div *ngIf="email.errors?.maxlength">
+                Email can not be more than 30 characters long
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" formControlName="username" name="username" id="username" autocomplete="off" required class="form-control">
+            <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
+              <div *ngIf="username.errors.required">
+                username is required.
+              </div>
+              <div *ngIf="username.errors?.minlength">
+                username must be at least 3 characters long.
+              </div>
+              <div *ngIf="username.errors?.maxlength">
+                username cannot be more than 15 characters long.
+              </div>
+              <div *ngIf="username.errors?.validateUsername">
+                Username cannot contain special characters
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" name="password" id="password" class="form-control" required>
+            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+              <div *ngIf="password.errors.required">
+                *Password is required.
+              </div>
+              <div *ngIf="password.errors?.minlength">
+                *password must be at least 8 characters long.
+              </div>
+              <div *ngIf="password.errors?.maxlength">
+                *password can not be more than 35 characters long.
+              </div>
+              <div *ngIf="password.errors?.validatePassword">
+                *Password must have at least one lowercase, uppercase, special character and number
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password2">Password Confirm</label>
+            <div  >
+              <input [ngClass]="{'red' : registerForm.errors?.matchingPasswords, 'green':!registerForm.errors?.matchingPasswords}" type="password" formControlName="password2" name="password2" id="password2"  class="form-control">
+              <div *ngIf="password2.invalid && (password2.dirty || password.touched )" class="alert alert-danger">
+                <div *ngIf="registerForm.errors?.matchingPasswords">
+                  *passwords do not match
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="form-group">
+            <button [disabled]="!registerForm.valid" type="submit" class="btn btn-info">Register <i class="fa fa-user"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <p>{{registerForm.value | json}}</p>
+    <p>{{registerForm.status}}</p>
+    <p>{{registerForm.errors?.matchingPasswords | json }}</p>
+  </div>
+</div>
