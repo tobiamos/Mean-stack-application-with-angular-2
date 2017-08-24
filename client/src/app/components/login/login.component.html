@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="row show-hide-message">
+    <div [ngClass]="messageClass">{{message}}</div>
+  </div>
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title text-center">LOGIN</h3>
+      </div>
+      <div class="panel-body">
+        <form [formGroup]="loginForm" (submit)="onSubmit()" novalidate>
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div [ngClass]="{'has-error': username.errors && username.dirty, 'has-success': username.valid && username.dirty}">
+              <input type="text" formControlName="username" name="username" id="username" class="form-control">
+              <ul class="help-block">
+                <li *ngIf="username.errors?.required && username.dirty">This field is required</li>
+              </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div [ngClass]="{'has-error': password.errors && password.dirty, 'has-success': password.valid && password.dirty}">
+              <input type="password" formControlName= "password" name="password" id="password" class="form-control">
+            <ul class="help-block">
+              <li *ngIf="password.errors?.required && password.dirty">This field is required</li>
+            </ul>
+            </div>
+          </div>
+          <div class="form-group">
+            <button [disabled]=" !loginForm.valid || processing" type="submit" class="btn btn-lg btn-primary"> <i class="fa fa-sign-in"></i> Login in</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>

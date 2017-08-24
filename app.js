@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const router = express.Router();
 const mongoose = require('mongoose');
+const cors = require('cors');
 const config = require('./config/db');
 const authentication = require('./routes/authentication')(router);
 mongoose.Promise = global.Promise;
@@ -20,7 +21,7 @@ mongoose.connection.on('error',(err)=>{
 mongoose.connection.on('disconnected', ()=>{
     console.log('Disconnected from ', config.uri);
 });
-
+app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use('/authentication', authentication);

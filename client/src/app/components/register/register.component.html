@@ -1,88 +1,83 @@
 <div class="row">
-  <div class="col-md-3"></div>
-  <div class="col-md-6">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="text-center panel-title">Register</h3>
-      </div>
-      <div class="panel-body">
-        <p><i class="fa fa-edit"></i>Please fill in the form with correct information</p>
-        <br>
-        <form (submit)="onSubmit()" [formGroup]="registerForm" novalidate>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" formControlName="email" required name="email" id="email" autocomplete="off" class="form-control">
-            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
-              <div *ngIf="email.errors.required ||  email.errors.email">
-                A Valid Email is required.
-              </div>
-              <div *ngIf="email.errors?.minlength">
-                Email must be at least 5 characters long
-              </div>
-              <div *ngIf="email.errors?.maxlength">
-                Email can not be more than 30 characters long
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" formControlName="username" name="username" id="username" autocomplete="off" required class="form-control">
-            <div *ngIf="username.invalid && (username.dirty || username.touched)" class="alert alert-danger">
-              <div *ngIf="username.errors.required">
-                username is required.
-              </div>
-              <div *ngIf="username.errors?.minlength">
-                username must be at least 3 characters long.
-              </div>
-              <div *ngIf="username.errors?.maxlength">
-                username cannot be more than 15 characters long.
-              </div>
-              <div *ngIf="username.errors?.validateUsername">
-                Username cannot contain special characters
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" formControlName="password" name="password" id="password" class="form-control" required>
-            <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
-              <div *ngIf="password.errors.required">
-                *Password is required.
-              </div>
-              <div *ngIf="password.errors?.minlength">
-                *password must be at least 8 characters long.
-              </div>
-              <div *ngIf="password.errors?.maxlength">
-                *password can not be more than 35 characters long.
-              </div>
-              <div *ngIf="password.errors?.validatePassword">
-                *Password must have at least one lowercase, uppercase, special character and number
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="password2">Password Confirm</label>
-            <div  >
-              <input [ngClass]="{'red' : registerForm.errors?.matchingPasswords, 'green':!registerForm.errors?.matchingPasswords}" type="password" formControlName="password2" name="password2" id="password2"  class="form-control">
-              <div *ngIf="password2.invalid && (password2.dirty || password.touched )" class="alert alert-danger">
-                <div *ngIf="registerForm.errors?.matchingPasswords">
-                  *passwords do not match
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <div class="form-group">
-            <button [disabled]="!registerForm.valid" type="submit" class="btn btn-info">Register <i class="fa fa-user"></i></button>
-          </div>
-        </form>
-      </div>
+  <div class="row show-hide-message">
+    <div [ngClass]="messageClass" >
+      {{message}}
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2"></div>
+  <div class="col-md-8">
+    <form [formGroup]="registerForm" novalidate (submit)="onSubmit();">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div [ngClass]="{'has-error':(username.errors && username.dirty) || (!usernameValid && username.dirty), 'has-success': !username.errors && usernameValid}">
+          <input type="text" (blur)="checkUsername()" formControlName="username" class="form-control">
+          <ul class="help-block">
+            <li *ngIf="username.errors?.required && username.dirty">
+              This field is required
+            </li>
+            <li *ngIf="username.errors?.minlength || username.errors?.maxlength">
+              Minimum characters : 3, Maximum characters : 15
+            </li>
+            <li *ngIf="username.errors?.validateUsername && username.dirty">
+              Username must not have any special characters
+            </li>
+            <li *ngIf="usernameMessage">{{usernameMessage}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div [ngClass]="{'has-error':(email.errors && email.dirty) ||(!emailValid && email.dirty) , 'has-success': !email.errors && emailValid}">
+          <input type="email" (blur)="checkEmail()" autocomplete="off" class="form-control" name="email" id="email" formControlName="email">
+          <ul class="help-block">
+            <li *ngIf="email.errors?.required && email.dirty">
+              This field is required
+            </li>
+            <li *ngIf="email.errors?.minlength || email.errors?.maxlength">
+              Minimum characters :5, Maximum characters : 15
+            </li>
+            <li *ngIf="email.errors?.email && email.dirty">
+              This must be a valid Email address
+            </li>
+            <li *ngIf = "emailMessage">{{emailMessage}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div [ngClass]="{'has-error':(password.errors && password.dirty), 'has-success': !password.errors}">
+          <input type="password" name="password" id="password" formControlName="password" class="form-control">
+          <ul class="help-block">
+            <li *ngIf="password.errors?.required && password.dirty">
+              This field is required
+            </li>
+            <li *ngIf="password.errors?.minlength || password.errors?.maxlength">
+              Minimum characters : 8 , Maximum characters : 35
+            </li>
+            <li *ngIf="password.errors?.validatePassword && password.dirty">
+              Password Must have at least one uppercase letter, one number and a special character
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <div [ngClass]="{'has-error':(password2.errors && password2.dirty) ||( registerForm.errors?.matchingPasswords && password2.dirty), 'has-success': !password2.errors && !registerForm.errors?.matchingPasswords}">
+          <input type="password" name="password2" class="form-control" id="password2" formControlName="password2">
+          <ul class="help-block">
+            <li *ngIf="password2.errors?.required && password2.dirty">
+              This field is required
+            </li>
+            <li *ngIf="registerForm.errors?.matchingPasswords && password2.dirty">Passwords do not match</li>
+          </ul>
+        </div>
+      </div>
+      <div class="form-group">
+        <button [disabled]="!registerForm.valid || processing || !emailValid || !usernameValid" class="btn btn-lg btn-primary"> <i class="fa fa-user"></i> Register</button>
+      </div>
+    </form>
+    <p>{{registerForm.status | json}}</p>
     <p>{{registerForm.value | json}}</p>
-    <p>{{registerForm.status}}</p>
-    <p>{{registerForm.errors?.matchingPasswords | json }}</p>
   </div>
+  <div class="col-md-2"></div>
 </div>

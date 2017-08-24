@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {AuthService} from "../../services/auth.service";
+import {Router} from '@angular/router';
 
 @Component({
   selector: "app-register",
@@ -8,9 +10,19 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  submitted = false;
+  processing = false;
+  message :String;
+  messageClass : String;
+  emailValid = false; 
+  emailMessage : String;
+  usernameValid = false;
+  usernameMessage : String;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private auth : AuthService,
+    private router : Router
+  ) {
     this.createForm();
   }
 
@@ -39,7 +51,7 @@ export class RegisterComponent implements OnInit {
         "",
         [
           Validators.required,
-          Validators.minLength(8),
+          Validators.minLength(8), 
           Validators.maxLength(35),
           this.validatePassword
         ]
@@ -47,10 +59,39 @@ export class RegisterComponent implements OnInit {
       password2: ["", [Validators.required]]
     },{validator: this.matchingPasswords('password','password2')});
   }
+    disableForm(){
+      this.registerForm.controls['email'].disable();
+      this.registerForm.controls['username'].disable();
+      this.registerForm.controls['password'].disable();
+      this.registerForm.controls['password2'].disable();
+    }
+    enableForm(){
 
+      this.registerForm.controls['email'].enable();
+      this.registerForm.controls['username'].enable();
+      this.registerForm.controls['password'].enable();
+      this.registerForm.controls['password2'].enable();
+
+    }
   onSubmit() {
-    this.submitted = true;
-    console.log(this.registerForm.value);
+    this.processing = true;
+    this.disableForm();
+    const user = {
+      email : this.registerForm.get('email').value,
+      username : this.registerForm.get('username').value,
+      password : this.registerForm.get('password').value
+    }
+    this.auth.registerUser(user).subscribe(data =>{
+      this.messageClass = 'alert alert-success';
+      this.message = 'Registration successful';
+      setTimeout( ()=>{
+        this.router.navigate(['/login']);
+      },2000)
+    }, error => {
+      this.enableForm();
+      this.messageClass = 'alert alert-danger';
+      this.message = 'Username or email already exists';
+    })
   }
   validateUsername(controls) {
     const regex = new RegExp(/^[a-zA-Z0-9]+$/);
@@ -73,13 +114,41 @@ export class RegisterComponent implements OnInit {
   }
 
   matchingPasswords(password, password2){
-   return (group:FormGroup) =>{
-     if(group.controls[password].value === group.controls[password2].value){
+   return (group : FormGroup) => {
+     if( group.controls[password].value === group.controls[password2].value){
        return null;
      }else{
-         return {matchingPasswords:true}
+         return {"matchingPasswords":true}
      }
    }
+  }
+
+
+  checkEmail(){
+    const email = this.registerForm.get('email').value;
+    this.auth.checkEmail(email).subscribe(data =>{
+      if(!data.success){
+        this.emailValid = false;
+        this.emailMessage = data.message;
+
+      }else{
+        this.emailValid = true;
+        this.emailMessage = data.message;
+      }
+    })
+  }
+
+  checkUsername(){
+    const username = this.registerForm.get('username').value;
+    this.auth.checkUsername(username).subscribe(data =>{
+      if(!data.success){
+        this.usernameValid = false;
+        this.usernameMessage = data.message;
+      }else{
+        this.usernameValid = true;
+        this.usernameMessage = data.message;
+      }
+    })
   }
 
   get email() {
